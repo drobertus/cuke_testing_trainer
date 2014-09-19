@@ -23,7 +23,8 @@ dependencies {
     compile (
         'org.codehaus.groovy:groovy-all:2.3.4',
         'javax.servlet:servlet-api:2.5',
-        'com.sun.jersey:jersey-servlet:1.18.1'
+        'com.sun.jersey:jersey-servlet:1.18.1',
+        'com.google.inject:guice:3.0',
     )
 
     testCompile (

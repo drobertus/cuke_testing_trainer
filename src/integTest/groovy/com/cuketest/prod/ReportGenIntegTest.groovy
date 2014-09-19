@@ -1,8 +1,9 @@
 package com.cuketest.prod
 
-import com.sun.jersey.spi.container.servlet.ServletContainer
-import org.eclipse.jetty.server.Server
-import org.eclipse.jetty.server.handler.ContextHandler
+import com.cuketest.prod.injection.ProdModule
+import com.cuketest.prod.injector.TestInjectionModule
+import com.google.inject.Guice
+import com.google.inject.Injector
 import spock.lang.Specification
 
 import org.eclipse.jetty.server.Server;
@@ -12,26 +13,44 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import com.sun.jersey.spi.container.servlet.ServletContainer
 
 import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertTrue;
 
-/**
- * Created by David on 9/17/2014.
- */
+
 class ReportGenIntegTest extends Specification {
 
     def jetty
 
-    def "test output of query"() {
+    def testUserId = '514Jks'
+
+
+    def "test output of show"() {
+
+        setup:
+            def reportId= '1265'
 
         when:
-
-            def url = "http://localhost:9105/reportGenerator/show".toURL().getText()
+            def url = "http://localhost:9105/reports/show/${reportId}".toURL().getText()
         then:
-            assertEquals 'ta-da service!!', url
+            assertEquals 'ta-da!! Here is the report named ' + reportId, url
+    }
+
+
+    def "test the ability to request a report from a valid user"() {
+
+
+        when:
+        def url = "http://localhost:9105/reports/show/${reportId}".toURL().getText()
+        then:
+        assertEquals 'ta-da!! Here is the report named ' + reportId, url
     }
 
 
     void setup() {
+
+        def validUserList = []
+        validUserList << testUserId
+
+
+        ReportGenerator.injectorFactory = new TestInjectionModule(validUserList, validTestSets)
 
         jetty = new Server(9105)
         ServletHolder sh = new ServletHolder(ServletContainer.class);
@@ -46,6 +65,8 @@ class ReportGenIntegTest extends Specification {
     }
 
     void cleanup() {
+
         jetty.stop()
+        ReportGenerator.injectorFactory = null
     }
 }
