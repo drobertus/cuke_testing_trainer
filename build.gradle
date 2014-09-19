@@ -32,9 +32,11 @@ dependencies {
         'org.spockframework:spock-core:0.7-groovy-2.0',
         'com.mockrunner:mockrunner-servlet:1.0.3',
         //'com.sun.jersey:jersey-test-framework:1.18.1'
+
         'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-bundle:2.12',
         'org.eclipse.jetty:jetty-server:9.2.2.v20140723',
-        'org.eclipse.jetty:jetty-servlet:9.2.2.v20140723'
+        'org.eclipse.jetty:jetty-servlet:9.2.2.v20140723',
+        'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
     )
 
     integTestCompile (

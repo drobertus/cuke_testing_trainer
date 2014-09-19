@@ -15,15 +15,19 @@ class ReportGenTest {
     def reportGen
 
     final String userId = 'billTester@test.org'
+    final String reportName = 'Usage Data'
+    final List<String> rptParams = ['startDate', 'range']
 
     @Before
     public void setup() {
 
         def goodList = [userId]
         def userService = new TestUserService(goodList)
-        def reportService = new TestReportService()
+        def rptMap = [:]
+        rptMap.put(this.reportName, rptParams)
+        def reportService = new TestReportService(rptMap)
 
-        reportGen = new ReportGenerator(userService, reportService)
+        reportGen = new ReportGenerator(userService: userService, reportService: reportService)
     }
 
     @Test
@@ -38,13 +42,12 @@ class ReportGenTest {
     @Test
     public void test_request_report_creation_success() {
 
-        final reportType = 'basicReport'
-        final parameters = '[param1=12,param2=bob,param3=Feb.12.1973]'
-        def result = reportGen.generateReport(userId, reportType, parameters)
+        def result = reportGen.generateReport(userId, reportName, rptParams.toString())
         assertFalse ReportGenerator.INVALID_USER_ERROR == result
         assertFalse ReportGenerator.INVALID_REPORT_REQUEST == result
         assertNotNull result
         assertFalse result.isEmpty()
+        assertEquals 11, result.length()
 
     }
 }

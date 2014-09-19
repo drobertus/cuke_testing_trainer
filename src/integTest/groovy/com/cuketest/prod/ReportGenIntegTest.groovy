@@ -1,10 +1,7 @@
 package com.cuketest.prod
 
-import com.cuketest.prod.injection.ProdModule
 import com.cuketest.prod.injector.TestInjectionModule
 import com.cuketest.prod.services.TestDef
-import com.google.inject.Guice
-import com.google.inject.Injector
 import spock.lang.Specification
 
 import org.eclipse.jetty.server.Server;
@@ -39,10 +36,17 @@ class ReportGenIntegTest extends Specification {
 
 
     def "test the ability to request a report from a valid user"() {
-
-
         when:
-        //'/generateRpt/{userId}/{reportType}/{params}'
+
+        def http = new HTTPBuilder( 'http://restmirror.appspot.com/' )
+        def postBody = [name: 'bob', title: 'construction worker'] // will be url-encoded
+
+        http.post( path: '/', body: postBody,
+            requestContentType: URLENC ) { resp ->
+
+            println "POST Success: ${resp.statusLine}"
+            assert resp.statusLine.statusCode == 201
+        }
             def url = "http://localhost:9105/reports/generateRpt/${testUserId}/${testName1}/${test1ParamsNames}".toURL().getText()
 
         then:
@@ -71,11 +75,9 @@ class ReportGenIntegTest extends Specification {
         ServletContextHandler context = new ServletContextHandler(jetty, "/", ServletContextHandler.SESSIONS);
         context.addServlet(sh, "/*");
         jetty.start();
-
     }
 
     void cleanup() {
-
         jetty.stop()
         ReportGenerator.injectorFactory = null
     }

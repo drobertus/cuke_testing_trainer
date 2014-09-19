@@ -4,11 +4,8 @@ import com.cuketest.prod.injection.DefaultInjectionFactory
 import com.cuketest.prod.injection.InjectionFactory
 import com.cuketest.prod.services.ReportService
 import com.cuketest.prod.services.UserService
-import com.google.inject.Guice
-import com.google.inject.Inject
 import com.google.inject.Injector
 
-import javax.annotation.Resource
 import javax.ws.rs.GET
 import javax.ws.rs.POST
 import javax.ws.rs.Path
@@ -55,7 +52,8 @@ public class ReportGenerator {
             return INVALID_USER_ERROR
         }
 
-        if (!reportService.isValidReport(reportType, params)) {
+
+        if (!reportService.isValidReport(reportType, params.split(',').flatten() )) {
             return INVALID_REPORT_REQUEST
         }
 
@@ -73,4 +71,6 @@ public class ReportGenerator {
 
         return injectorFactory.getInjector()
     }
+
+
 }
