@@ -44,7 +44,7 @@ public class ReportGenerator {
 
 
     @POST
-    @Produces(['application/xml', 'application/json'])
+    @Produces(['application/json'])
     @Path('/generateRpt/{userId}/{reportType}/{params}')
     String generateReport(@PathParam("userId") String userId,
                           @PathParam("reportType") String reportType,

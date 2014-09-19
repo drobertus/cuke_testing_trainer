@@ -9,8 +9,8 @@ import com.google.inject.Injector
  */
 class TestInjectionModule extends InjectionFactory {
 
-    TestInjectionModule() {
-        injector = Guice.createInjector(new TestModule())
+    TestInjectionModule(validUserList, testDefs) {
+        injector = Guice.createInjector(new TestModule(validUserList, testDefs))
     }
 
 }

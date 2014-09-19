@@ -2,6 +2,7 @@ package com.cuketest.prod
 
 import com.cuketest.prod.injection.ProdModule
 import com.cuketest.prod.injector.TestInjectionModule
+import com.cuketest.prod.services.TestDef
 import com.google.inject.Guice
 import com.google.inject.Injector
 import spock.lang.Specification
@@ -20,6 +21,8 @@ class ReportGenIntegTest extends Specification {
     def jetty
 
     def testUserId = '514Jks'
+    def testName1 = 'Usage Data'
+    def test1ParamsNames = ['startDate','periodInDays']
 
 
     def "test output of show"() {
@@ -29,6 +32,7 @@ class ReportGenIntegTest extends Specification {
 
         when:
             def url = "http://localhost:9105/reports/show/${reportId}".toURL().getText()
+
         then:
             assertEquals 'ta-da!! Here is the report named ' + reportId, url
     }
@@ -38,9 +42,11 @@ class ReportGenIntegTest extends Specification {
 
 
         when:
-        def url = "http://localhost:9105/reports/show/${reportId}".toURL().getText()
+        //'/generateRpt/{userId}/{reportType}/{params}'
+            def url = "http://localhost:9105/reports/generateRpt/${testUserId}/${testName1}/${test1ParamsNames}".toURL().getText()
+
         then:
-        assertEquals 'ta-da!! Here is the report named ' + reportId, url
+            assertEquals 'ta-da!! Here is the report named ' + reportId, url
     }
 
 
@@ -49,6 +55,10 @@ class ReportGenIntegTest extends Specification {
         def validUserList = []
         validUserList << testUserId
 
+        def validTestSets = []
+
+        def aTest = new TestDef(name: testName1, paramNames: test1ParamsNames)
+        validTestSets << aTest
 
         ReportGenerator.injectorFactory = new TestInjectionModule(validUserList, validTestSets)
 
@@ -69,4 +79,6 @@ class ReportGenIntegTest extends Specification {
         jetty.stop()
         ReportGenerator.injectorFactory = null
     }
+
+
 }

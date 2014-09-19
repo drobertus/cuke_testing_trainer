@@ -7,7 +7,7 @@ import com.google.inject.Injector
  */
 abstract class InjectionFactory {
 
-    Injector injector
+    protected Injector injector
 
     Injector getInjector() {
         return injector
