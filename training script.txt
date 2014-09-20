@@ -1,0 +1,59 @@
+Software Testing from the Ground Up: Kinds of Tests, Levels of Testing
+
+Testing from the ground up is today regarded as the appropriate
+approach to enterprise software development.  Write code.  Write a test for
+ that code.  The reason is not just the case that the tests are, in and of
+ themselves, valuable.  Some may have very, very low value, in fact. The
+ real purpose of writing tests as you develop code is to improve the way
+ you develop at all.
+
+ If you test as you write you develop better coding habits; patterns emerge
+ as a result of the continuous low-level refactoring that is often needed
+  when you need to test an individual method; new, higher patterns emerge
+  as a result of mid-level and service-level testing.  Some patterns such as
+  dependency injection may at first seem like extra work but when you apply
+  them to make a product testable you can suddenly find and prevent errors that
+  unit tests are too fine to identify, and post-deployment or UI-driven tests
+  are too slow, unreliable, and coarse-grained to implement in the needed detail
+  (and be performant).
+
+As a market-driven demonstration of this, a look at the most popular rapid-development
+   frameworks such as Rails, Grails, and Play, there is deliberate encouragement of
+   the use of testing from the ground up.  Grails, for example, allows a user to
+   construct scaffolds with at least 1 and often 2 layers of tests (for but web
+   controllers and domain objects, as well as services).
+
+----------------------------------
+
+Gherkin and Cucumber: Using it at the High, Mid and Low Level
+
+RT-Auto based tests can now be written in Gherkin
+
+Mid-level test frameworks for Native-client, Flex Client,
+core-server, and audio-server can use gherkin for mid-level
+
+--------------------------------
+What are the questions to ask during story development:
+1) what components will be affected?
+2) At what level can each affected component be tested for
+    the change it will incur?
+
+    Examples:
+    The chairperson should be
+    visually alerted with the number of participants who join,
+    leave, and participate in an "equilizer" style graph on the
+    native client (or the dash board?).  The refresh rate of this chart
+    should be variable and should also track a line graph that
+    should also display key events such as slide changes, video
+    starts, stops and pauses.
+
+
+    Purpose: this will allow a Chairperson to monitor the success (or
+    more specifically observe the failure rate) of a conference
+    as a factor of time.
+
+
+
+So, the best pattern to approach for our new architectures is to
+build the necessary frameworks as early as possible.
+
