@@ -30,16 +30,25 @@ public class ReportGenerator {
         this.reportService = getInjectorFromFactory().getInstance(ReportService.class)
     }
 
-
+    /**
+     * Show a report that was generated and given a unique id
+     * @param reportId
+     * @return
+     */
     @GET
-    @Produces(['application/xml', 'application/json'])
+    @Produces(['application/json'])
     @Path("/show/{reportId}")
     String show(@PathParam("reportId") String reportId) {
         "ta-da!! Here is the report named ${reportId}"
     }
 
-
-
+    /**
+     * request for a report to be built
+     * @param userId
+     * @param reportType
+     * @param params
+     * @return
+     */
     @POST
     @Produces(['application/json'])
     @Path('/generateRpt/{userId}/{reportType}/{params}')

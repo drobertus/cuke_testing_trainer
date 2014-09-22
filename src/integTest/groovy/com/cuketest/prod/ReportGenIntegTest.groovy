@@ -2,7 +2,13 @@ package com.cuketest.prod
 
 import com.cuketest.prod.injector.TestInjectionModule
 import com.cuketest.prod.services.TestDef
+import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
+import groovyx.net.http.Method
+import net.sf.json.JSON
+import org.apache.http.client.HttpClient
+import org.apache.http.client.methods.HttpPost
+import org.apache.http.impl.client.DefaultHttpClient
 import spock.lang.Specification
 
 import org.eclipse.jetty.server.Server;
@@ -12,6 +18,8 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import com.sun.jersey.spi.container.servlet.ServletContainer
 
 import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertFalse
+import static org.junit.Assert.assertNotNull
 
 
 class ReportGenIntegTest extends Specification {
@@ -19,7 +27,7 @@ class ReportGenIntegTest extends Specification {
     def jetty
 
     def testUserId = '514Jks'
-    def testName1 = 'Usage Data'
+    def testName1 = 'Usage_Data'
     def test1ParamsNames = ['startDate','periodInDays']
 
 
@@ -39,19 +47,30 @@ class ReportGenIntegTest extends Specification {
     def "test the ability to request a report from a valid user"() {
         when:
 
-        def http = new HTTPBuilder( 'http://restmirror.appspot.com/' )
-        def postBody = [name: 'bob', title: 'construction worker'] // will be url-encoded
+        def url = "http://localhost:9105/reports"
+        //def path = "/generateRpt/${testUserId}/${testName1}/${test1ParamsNames}"
 
-        http.post( path: '/', body: postBody,
-            requestContentType: URLENC ) { resp ->
-
-            println "POST Success: ${resp.statusLine}"
-            assert resp.statusLine.statusCode == 201
+        def formattedParams = ""
+        test1ParamsNames.each {
+            formattedParams = formattedParams + it + '_'
         }
-            def url = "http://localhost:9105/reports/generateRpt/${testUserId}/${testName1}/${test1ParamsNames}".toURL().getText()
+
+        def path = "/generateRpt/${testUserId}/${URLEncoder.encode(testName1, 'UTF-8')}/${formattedParams}" //, 'UTF-8')}"
+        println "thePath= ${path}"
+
+        HttpClient client = new DefaultHttpClient();
+
+        def thePost = new HttpPost(url + path)
+
+        def response = client.execute(thePost)
+
+        def responseContent = response.getEntity().getContent().getText()
+        println responseContent
 
         then:
-            assertEquals 'ta-da!! Here is the report named ' + reportId, url
+            assertNotNull responseContent
+            assertFalse responseContent.empty
+            assertEquals 11, responseContent.length()
     }
 
 

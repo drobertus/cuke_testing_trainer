@@ -57,3 +57,32 @@ What are the questions to ask during story development:
 So, the best pattern to approach for our new architectures is to
 build the necessary frameworks as early as possible.
 
+
+---------------------------------------------
+
+Unit vs. integ (vs post-deployment) test demo
+
+Notice that the unit test, ReportGenTest, and the integration test, ReportGenIntegTest,
+both test the same methods and check for identical results.  So why chose one over the other?
+
+There is a growing gap in how application contexts, even method-level contexts, are defined.
+If you look at the ReportGenerator class, notice the @GET and @POST annotation.  IN terms of
+the unit test for the business logic, these are completely ignored  CHange the @GET on the "show" method
+to @POST.  if you run the unit tests again, both pass.  If you run the integration tests,
+the test for the "show" method will fail.  The integration test runs the business logic
+in the context that is will in production (or least it can and generally should replicate it as closely as possible).
+
+Notice though that the @Produces annotation suggests that both methods should return a JSON response,
+but neither the integration test or unit test, as they are written, checks that the response
+is in fact valid JSON (they are not).  This would cause a test written to use a client that needed a
+JSON response to fail, even if the test itself was unaware that the response needed to be in JSON.
+
+Some things CAN be unit tests, like checking that the response is in JSON.  Other need higher level tests
+like the integration test able to check a POST or GET. Even if the unit test was written to check for
+that the fact that the annotation requires a container means that the test would no longer be a true
+unit test, but was now a mid-level test as well.
+
+
+
+
+

@@ -11,8 +11,6 @@ class TestReportService implements ReportService {
 
     @Override
     boolean isValidReport(String reportType, List<String> params) {
-
-
         return true
     }
 }
