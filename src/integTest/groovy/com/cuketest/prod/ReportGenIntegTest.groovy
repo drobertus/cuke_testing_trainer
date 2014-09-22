@@ -2,6 +2,7 @@ package com.cuketest.prod
 
 import com.cuketest.prod.injector.TestInjectionModule
 import com.cuketest.prod.services.TestDef
+import groovyx.net.http.HTTPBuilder
 import spock.lang.Specification
 
 import org.eclipse.jetty.server.Server;
