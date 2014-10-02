@@ -4,6 +4,7 @@ import com.cuketest.prod.injection.DefaultInjectionFactory
 import com.cuketest.prod.injection.InjectionFactory
 import com.cuketest.prod.services.ReportService
 import com.cuketest.prod.services.UserService
+import com.google.inject.Inject
 import com.google.inject.Injector
 
 import javax.ws.rs.GET
@@ -15,9 +16,7 @@ import javax.ws.rs.Produces
 @Path("/reports")
 public class ReportGenerator {
 
-
     private UserService userService
-
     private ReportService reportService
 
     public static final String INVALID_USER_ERROR = 'Invalid user'
@@ -25,7 +24,8 @@ public class ReportGenerator {
     static InjectionFactory injectorFactory
 
     public ReportGenerator() {
-
+        //we need to use an empty constructor since we don't
+        //control the instantiation
         this.userService = getInjectorFromFactory().getInstance(UserService.class)
         this.reportService = getInjectorFromFactory().getInstance(ReportService.class)
     }

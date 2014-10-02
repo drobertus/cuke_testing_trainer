@@ -50,7 +50,7 @@ dependencies {
     integTestRuntime (configurations.testRuntime)
 }
 
-task integTest(type: Test) { 
+task integTest(type: Test) {
     testClassesDir = sourceSets.integTest.output.classesDir
     classpath = sourceSets.integTest.runtimeClasspath
 

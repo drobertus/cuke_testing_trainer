@@ -85,4 +85,14 @@ unit test, but was now a mid-level test as well.
 
 
 
+Think about abstraction:
+Notice that the test for getting an invalid user message does not test the User Service.
+
+We are not testing the cases for what represents a valid or invalid user (that test would
+belong in a UserService test).  We are testing that WHEN an invalid user is identified that the
+response to the request is correct.
+
+In comparison look at the set of accounts we have to prep for RTAuto to be able to test various
+scenarios.  A mid-level or unit test (minus the core_server mid-level tests) have no need for that.
+
 

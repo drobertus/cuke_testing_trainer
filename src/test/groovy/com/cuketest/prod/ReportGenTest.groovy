@@ -18,17 +18,6 @@ class ReportGenTest {
     final String reportName = 'Usage Data'
     final List<String> rptParams = ['startDate', 'range']
 
-    @Before
-    public void setup() {
-
-        def goodList = [userId]
-        def userService = new TestUserService(goodList)
-        def rptMap = [:]
-        rptMap.put(this.reportName, rptParams)
-        def reportService = new TestReportService(rptMap)
-
-        reportGen = new ReportGenerator(userService: userService, reportService: reportService)
-    }
 
     @Test
     public void testShowAReport() {
@@ -49,5 +38,26 @@ class ReportGenTest {
         assertFalse result.isEmpty()
         assertEquals 11, result.length()
 
+    }
+
+    @Test
+    public void invalid_user_requests_report() {
+        def invalidUserId = 'sdfsdf'
+        def result = reportGen.generateReport(invalidUserId, reportName, rptParams.toString())
+        assertEquals( ReportGenerator.INVALID_USER_ERROR, result)
+
+    }
+
+
+    @Before
+    public void setup() {
+
+        def goodList = [userId]
+        def userService = new TestUserService(goodList)
+        def rptMap = [:]
+        rptMap.put(this.reportName, rptParams)
+        def reportService = new TestReportService(rptMap)
+        //notice we bypass the injection process for a unit test (or can, anyway)
+        reportGen = new ReportGenerator(userService: userService, reportService: reportService)
     }
 }

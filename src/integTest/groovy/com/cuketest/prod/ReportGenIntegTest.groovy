@@ -2,10 +2,7 @@ package com.cuketest.prod
 
 import com.cuketest.prod.injector.TestInjectionModule
 import com.cuketest.prod.services.TestDef
-import groovyx.net.http.ContentType
-import groovyx.net.http.HTTPBuilder
-import groovyx.net.http.Method
-import net.sf.json.JSON
+import com.google.inject.Injector
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.impl.client.DefaultHttpClient
@@ -33,44 +30,73 @@ class ReportGenIntegTest extends Specification {
 
     def "test output of show"() {
 
-        setup:
+        setup: "given the ID of a known report that has been generated"
             def reportId= '1265'
 
-        when:
+        when: "that report is requested"
             def url = "http://localhost:9105/reports/show/${reportId}".toURL().getText()
 
-        then:
+        then: "we should get back the report"
             assertEquals 'ta-da!! Here is the report named ' + reportId, url
     }
 
 
-    def "test the ability to request a report from a valid user"() {
-        when:
+    def "a user gets back a report ID when he requests a valid report"() {
 
-        def url = "http://localhost:9105/reports"
-        //def path = "/generateRpt/${testUserId}/${testName1}/${test1ParamsNames}"
+        setup:
+            def url = "http://localhost:9105/reports"
 
-        def formattedParams = ""
-        test1ParamsNames.each {
-            formattedParams = formattedParams + it + '_'
-        }
+            def formattedParams = ""
+            test1ParamsNames.each {
+                formattedParams = formattedParams + it + '_'
+            }
 
-        def path = "/generateRpt/${testUserId}/${URLEncoder.encode(testName1, 'UTF-8')}/${formattedParams}" //, 'UTF-8')}"
-        println "thePath= ${path}"
+            def path = "/generateRpt/${testUserId}/${URLEncoder.encode(testName1, 'UTF-8')}/${formattedParams}" //, 'UTF-8')}"
+            println "thePath= ${path}"
 
-        HttpClient client = new DefaultHttpClient();
+            HttpClient client = new DefaultHttpClient();
 
-        def thePost = new HttpPost(url + path)
+        when: "a valid user makes a request for a type of report he is allowed to create"
 
-        def response = client.execute(thePost)
+            def thePost = new HttpPost(url + path)
+            def response = client.execute(thePost)
 
-        def responseContent = response.getEntity().getContent().getText()
-        println responseContent
+        then: "the ID for that report should be returned to the user"
+            def responseContent = response.getEntity().getContent().getText()
+            println responseContent
 
-        then:
             assertNotNull responseContent
             assertFalse responseContent.empty
             assertEquals 11, responseContent.length()
+    }
+
+
+    def "an invalid user requests a report he should receive a warning message"() {
+
+        setup:
+            def invalidUserId= 'Bob-Smith'
+            def url = "http://localhost:9105/reports"
+
+            def formattedParams = ""
+            test1ParamsNames.each {
+                formattedParams = formattedParams + it + '_'
+            }
+
+            def path = "/generateRpt/${invalidUserId}/${URLEncoder.encode(testName1, 'UTF-8')}/${formattedParams}" //, 'UTF-8')}"
+            println "thePath= ${path}"
+
+            HttpClient client = new DefaultHttpClient();
+
+        when: "an invalid user makes a report request"
+
+            def thePost = new HttpPost(url + path)
+            def response = client.execute(thePost)
+
+        then: "an error message should be returned"
+            def responseContent = response.getEntity().getContent().getText()
+            println responseContent
+
+            assertEquals ReportGenerator.INVALID_USER_ERROR, responseContent
     }
 
     /**
@@ -104,6 +130,7 @@ class ReportGenIntegTest extends Specification {
 
     void cleanup() {
         jetty.stop()
+        //because this is static, clean it up!
         ReportGenerator.injectorFactory = null
     }
 
