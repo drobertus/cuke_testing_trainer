@@ -73,7 +73,12 @@ class ReportGenIntegTest extends Specification {
             assertEquals 11, responseContent.length()
     }
 
-
+    /**
+     * The setup for an integration test requires running components in their "natural environments"
+     * In this case we need to run a REST service in a web container, but should not be
+     * tied to a remote resource- have the test framework internalize as many aspects and dependencies
+     * of a deployed product as possible.
+     */
     void setup() {
 
         def validUserList = []

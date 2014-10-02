@@ -50,13 +50,13 @@ dependencies {
     integTestRuntime (configurations.testRuntime)
 }
 
-task integTest(type: Test) { //}, dependsOn: jar) {
+task integTest(type: Test) { 
     testClassesDir = sourceSets.integTest.output.classesDir
     classpath = sourceSets.integTest.runtimeClasspath
 
     testClassesDir = sourceSets.integTest.output.classesDir
     classpath = sourceSets.integTest.runtimeClasspath
-    //systemProperties['jar.path'] = jar.archivePath
+
 }
 
 check.dependsOn integTest
