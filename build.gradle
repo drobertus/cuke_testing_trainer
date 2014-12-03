@@ -1,6 +1,8 @@
 apply plugin: 'groovy'
+apply plugin: 'war'
+apply from: 'gradle/integTest.gradle'
 
-sourceCompatibility = 1.6
+sourceCompatibility = 1.7
 version = '1.0'
 
 repositories {
@@ -11,19 +13,14 @@ configurations.all {
     exclude module: "groovy"
 }
 
-sourceSets {
-    integTest {
-        groovy.srcDir file('src/integTest/groovy')
-        java.srcDir file('src/integTest/groovy')
-        resources.srcDir file('src/integTest/resources')
-    }
-}
+
 
 dependencies {
     compile (
         'org.codehaus.groovy:groovy-all:2.3.4',
         'javax.servlet:servlet-api:2.5',
         'com.sun.jersey:jersey-servlet:1.18.1',
+        'com.sun.jersey.contribs:jersey-guice:1.18.1',
         'com.google.inject:guice:3.0',
     )
 
@@ -33,30 +30,18 @@ dependencies {
         'com.mockrunner:mockrunner-servlet:1.0.3',
         //'com.sun.jersey:jersey-test-framework:1.18.1'
 
-        'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-bundle:2.12',
-        'org.eclipse.jetty:jetty-server:9.2.2.v20140723',
-        'org.eclipse.jetty:jetty-servlet:9.2.2.v20140723',
-        'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
     )
 
     integTestCompile (
-        sourceSets.main.output,
-        configurations.testCompile,
-        sourceSets.test.output,
+        'info.cukes:cucumber-java:1.2.0',
+            'info.cukes:cucumber-core:1.2.0',
+            'info.cukes:cucumber-junit:1.2.0',
 
-
-
+            'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-bundle:2.12',
+            'org.eclipse.jetty:jetty-server:9.2.2.v20140723',
+            //'org.eclipse.jetty:jetty-servlet:9.2.2.v20140723',
+            'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1',
+            'org.eclipse.jetty:jetty-webapp:9.2.2.v20140723',
     )
-    integTestRuntime (configurations.testRuntime)
-}
-
-task integTest(type: Test) {
-    testClassesDir = sourceSets.integTest.output.classesDir
-    classpath = sourceSets.integTest.runtimeClasspath
-
-    testClassesDir = sourceSets.integTest.output.classesDir
-    classpath = sourceSets.integTest.runtimeClasspath
 
 }
-
-check.dependsOn integTest
