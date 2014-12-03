@@ -32,8 +32,8 @@ class ReportGenTest {
     public void test_request_report_creation_success() {
 
         def result = reportGen.generateReport(userId, reportName, rptParams.toString())
-        assertFalse ReportGenerator.INVALID_USER_ERROR == result
-        assertFalse ReportGenerator.INVALID_REPORT_REQUEST == result
+        assertFalse ReportGeneratorService.INVALID_USER_ERROR == result
+        assertFalse ReportGeneratorService.INVALID_REPORT_REQUEST == result
         assertNotNull result
         assertFalse result.isEmpty()
         assertEquals 11, result.length()
@@ -44,7 +44,7 @@ class ReportGenTest {
     public void invalid_user_requests_report() {
         def invalidUserId = 'sdfsdf'
         def result = reportGen.generateReport(invalidUserId, reportName, rptParams.toString())
-        assertEquals( ReportGenerator.INVALID_USER_ERROR, result)
+        assertEquals( ReportGeneratorService.INVALID_USER_ERROR, result)
 
     }
 
@@ -57,7 +57,7 @@ class ReportGenTest {
         def rptMap = [:]
         rptMap.put(this.reportName, rptParams)
         def reportService = new TestReportService(rptMap)
-        //notice we bypass the injection process for a unit test (or can, anyway)
-        reportGen = new ReportGenerator(userService: userService, reportService: reportService)
+        //notice we bypass the inject process for a unit test (or can, anyway)
+        reportGen = new ReportGeneratorService(userService, reportService)
     }
 }

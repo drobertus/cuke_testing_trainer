@@ -1,0 +1,25 @@
+<web-app>
+
+    <listener>
+        <listener-class>com.cuketest.prod.inject.ReportGenConfig</listener-class>
+    </listener>
+
+    <!--BA Service filter-->
+
+    <filter>
+        <filter-name>Guice Filter</filter-name>
+        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>Guice Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <init-param>
+        <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+        <param-value>true</param-value>
+    </init-param>
+
+</web-app>

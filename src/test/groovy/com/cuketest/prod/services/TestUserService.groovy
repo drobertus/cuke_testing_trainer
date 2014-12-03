@@ -1,15 +1,14 @@
 package com.cuketest.prod.services
 
-import spock.util.mop.Use
+import groovy.util.logging.Log
 
-/**
- * Created by drobertu on 9/19/14.
- */
+@Log
 class TestUserService implements UserService {
 
     def validUsers = []
 
-    TestUserService(usersList) {
+    TestUserService(List<String> usersList) {
+        log.info ("test user service with ${usersList.size()} users")
         validUsers.addAll(usersList)
     }
 

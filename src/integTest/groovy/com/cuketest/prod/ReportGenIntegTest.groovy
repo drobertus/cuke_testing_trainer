@@ -1,18 +1,18 @@
 package com.cuketest.prod
 
-import com.cuketest.prod.injector.TestInjectionModule
-import com.cuketest.prod.services.TestDef
-import com.google.inject.Injector
+import com.cuketest.prod.inject.ReportGenConfig
+import com.cuketest.prod.inject.ReportGenTestConfig
+import com.google.inject.servlet.GuiceFilter
+
+//import com.cuketest.prod.inject.TestInjectionModule
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.impl.client.DefaultHttpClient
+import org.eclipse.jetty.servlet.FilterHolder
+import org.eclipse.jetty.webapp.WebAppContext
 import spock.lang.Specification
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-
-import com.sun.jersey.spi.container.servlet.ServletContainer
+import org.eclipse.jetty.server.Server
 
 import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertFalse
@@ -27,6 +27,7 @@ class ReportGenIntegTest extends Specification {
     def testName1 = 'Usage_Data'
     def test1ParamsNames = ['startDate','periodInDays']
 
+    def testConfig
 
     def "test output of show"() {
 
@@ -96,7 +97,7 @@ class ReportGenIntegTest extends Specification {
             def responseContent = response.getEntity().getContent().getText()
             println responseContent
 
-            assertEquals ReportGenerator.INVALID_USER_ERROR, responseContent
+            assertEquals ReportGeneratorService.INVALID_USER_ERROR, responseContent
     }
 
     /**
@@ -110,28 +111,43 @@ class ReportGenIntegTest extends Specification {
         def validUserList = []
         validUserList << testUserId
 
-        def validTestSets = []
+        def validTestSets = [:]
 
-        def aTest = new TestDef(name: testName1, paramNames: test1ParamsNames)
-        validTestSets << aTest
+        validTestSets << [testName1: test1ParamsNames]
 
-        ReportGenerator.injectorFactory = new TestInjectionModule(validUserList, validTestSets)
 
         jetty = new Server(9105)
-        ServletHolder sh = new ServletHolder(ServletContainer.class);
-        sh.setInitParameter("com.sun.jersey.config.property.resourceConfigClass", "com.sun.jersey.api.core.PackagesResourceConfig");
-        sh.setInitParameter("com.sun.jersey.config.property.packages", "com.cuketest.prod");//Set the package where the services reside
-        sh.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
 
-        ServletContextHandler context = new ServletContextHandler(jetty, "/", ServletContextHandler.SESSIONS);
-        context.addServlet(sh, "/*");
+        WebAppContext context = new WebAppContext();
+
+        context.setContextPath("/");
+
+
+        //TODO: Build a test framework that provides a test DataProvider but uses the real User and Report service classes
+       // testConfig = new ReportGenConfig()
+        testConfig = new ReportGenTestConfig(validUserList, validTestSets);
+
+
+        context.addEventListener(testConfig);
+
+        FilterHolder guiceHolder = new FilterHolder();
+        guiceHolder.setFilter(new GuiceFilter());
+        guiceHolder.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
+
+        context.addFilter(guiceHolder, "/*", null);
+
+        context.setResourceBase("./src/main/groovy");
+        context.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
+
+
+        jetty.setHandler(context);
+
+
         jetty.start();
     }
 
     void cleanup() {
         jetty.stop()
-        //because this is static, clean it up!
-        ReportGenerator.injectorFactory = null
     }
 
 
