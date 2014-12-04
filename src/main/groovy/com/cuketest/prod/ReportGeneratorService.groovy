@@ -36,15 +36,19 @@ public class ReportGeneratorService {
 
     String generateReport(String userId,
                           String reportType,
-                          String params) {
-
-
+                          Map<String,String> params) {
+        println("params found in service=" + params)
         if(!userService.isValidUser(userId)) {
             return INVALID_USER_ERROR
         }
 
+//        List<String> parsedParams = params.split(',')
 
-        if (!reportService.isValidReport(reportType, params.split(',').flatten() )) {
+//        for (int i =0; i < parsedParams.size(); i ++){
+//            parsedParams[i] = parsedParams[i].trim()
+//        }
+
+        if (!reportService.isValidReport(reportType, params.keySet())) {
             return INVALID_REPORT_REQUEST
         }
 

@@ -1,5 +1,6 @@
 package com.cuketest.prod
 
+import com.cuketest.prod.util.ParameterParser
 import com.google.inject.Inject;
 import com.google.inject.Singleton
 import com.sun.jersey.core.spi.factory.ResponseImpl
@@ -25,8 +26,9 @@ public class DefaultReportGenerator implements ReportGenerator {
 
     @Override
     public Response generateReport(final String userId, final String reportType, final String params) {
-
-        def genRequest = rptGenService.generateReport(userId, reportType,params)
+        println("params found in default=" + params)
+        Map<String,String> keyVals = ParameterParser.parseParams(params)
+        def genRequest = rptGenService.generateReport(userId, reportType, keyVals)
         return Response.ok(genRequest).build()
     }
 }

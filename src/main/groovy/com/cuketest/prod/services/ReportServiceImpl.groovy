@@ -14,7 +14,7 @@ class ReportServiceImpl implements ReportService{
 //    }
 
     @Override
-    boolean isValidReport(String reportType, List<String> params) {
+    boolean isValidReport(String reportType, Collection<String> params) {
         return false
     }
 }

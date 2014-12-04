@@ -2,6 +2,7 @@ package com.cuketest.prod
 
 import com.cuketest.prod.inject.ReportGenConfig
 import com.cuketest.prod.inject.ReportGenTestConfig
+import com.cuketest.prod.util.ParameterGenerator
 import com.google.inject.servlet.GuiceFilter
 
 //import com.cuketest.prod.inject.TestInjectionModule
@@ -13,6 +14,8 @@ import org.eclipse.jetty.webapp.WebAppContext
 import spock.lang.Specification
 
 import org.eclipse.jetty.server.Server
+
+import javax.ws.rs.core.MultivaluedMap
 
 import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertFalse
@@ -26,6 +29,7 @@ class ReportGenIntegTest extends Specification {
     def testUserId = '514Jks'
     def testName1 = 'Usage_Data'
     def test1ParamsNames = ['startDate','periodInDays']
+    def test1ParamVals = ['20100101','365']
 
     def testConfig
 
@@ -47,12 +51,10 @@ class ReportGenIntegTest extends Specification {
         setup:
             def url = "http://localhost:9105/reports"
 
-            def formattedParams = ""
-            test1ParamsNames.each {
-                formattedParams = formattedParams + it + '_'
-            }
+            def formattedParams = ParameterGenerator.convertToNameValPair(test1ParamsNames, test1ParamVals)
 
-            def path = "/generateRpt/${testUserId}/${URLEncoder.encode(testName1, 'UTF-8')}/${formattedParams}" //, 'UTF-8')}"
+
+            def path = "/generateRpt/${testUserId}/${URLEncoder.encode(this.testName1, 'UTF-8')}/${formattedParams}" //, 'UTF-8')}"
             println "thePath= ${path}"
 
             HttpClient client = new DefaultHttpClient();
@@ -78,10 +80,9 @@ class ReportGenIntegTest extends Specification {
             def invalidUserId= 'Bob-Smith'
             def url = "http://localhost:9105/reports"
 
-            def formattedParams = ""
-            test1ParamsNames.each {
-                formattedParams = formattedParams + it + '_'
-            }
+            def formattedParams = ParameterGenerator.convertToNameValPair(test1ParamsNames, test1ParamVals)
+            //def formattedParams = convertToNameValPair(test1ParamsNames)
+
 
             def path = "/generateRpt/${invalidUserId}/${URLEncoder.encode(testName1, 'UTF-8')}/${formattedParams}" //, 'UTF-8')}"
             println "thePath= ${path}"
@@ -100,6 +101,8 @@ class ReportGenIntegTest extends Specification {
             assertEquals ReportGeneratorService.INVALID_USER_ERROR, responseContent
     }
 
+
+
     /**
      * The setup for an integration test requires running components in their "natural environments"
      * In this case we need to run a REST service in a web container, but should not be
@@ -109,11 +112,11 @@ class ReportGenIntegTest extends Specification {
     void setup() {
 
         def validUserList = []
-        validUserList << testUserId
+        validUserList << this.testUserId
 
         def validTestSets = [:]
 
-        validTestSets << [testName1: test1ParamsNames]
+        validTestSets.put(testName1, test1ParamsNames)
 
 
         jetty = new Server(9105)
