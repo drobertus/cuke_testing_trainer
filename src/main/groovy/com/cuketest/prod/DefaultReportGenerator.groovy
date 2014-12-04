@@ -1,7 +1,10 @@
 package com.cuketest.prod
 
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import com.google.inject.Singleton
+import com.sun.jersey.core.spi.factory.ResponseImpl
+
+import javax.ws.rs.core.Response;
 
 
 @Singleton
@@ -11,18 +14,19 @@ public class DefaultReportGenerator implements ReportGenerator {
 
     @Inject
     DefaultReportGenerator(final ReportGeneratorService reportGenService) {
-        //System.out.println("Default report generator")
         rptGenService = reportGenService
     }
 
     @Override
-    public String show(final String reportId) {
-        return rptGenService.show(reportId)
+    public Response show(final String reportId) {
+        def theResponse = rptGenService.show(reportId)
+        return Response.ok(theResponse).build();
     }
 
     @Override
-    public String generateReport(final String userId, final String reportType, final String params) {
+    public Response generateReport(final String userId, final String reportType, final String params) {
 
-        return rptGenService.generateReport(userId, reportType,params)
+        def genRequest = rptGenService.generateReport(userId, reportType,params)
+        return Response.ok(genRequest).build()
     }
 }

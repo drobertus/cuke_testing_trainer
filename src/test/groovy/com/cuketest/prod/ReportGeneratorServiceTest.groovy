@@ -10,7 +10,7 @@ import static org.junit.Assert.assertFalse
 import static org.junit.Assert.assertNotNull
 
 
-class ReportGenTest {
+class ReportGeneratorServiceTest {
 
     def reportGen
 

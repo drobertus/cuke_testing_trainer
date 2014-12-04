@@ -5,6 +5,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 @Path("/reports")
 public interface ReportGenerator {
@@ -12,13 +13,13 @@ public interface ReportGenerator {
     @GET
     @Produces("application/json")
     @Path("/show/{reportId}")
-    String show(@PathParam("reportId") String reportId);
+    Response show(@PathParam("reportId") String reportId);
 
 
     @POST
     @Produces("application/json")
     @Path("/generateRpt/{userId}/{reportType}/{params}")
-    String generateReport(@PathParam("userId") String userId,
+    Response generateReport(@PathParam("userId") String userId,
                           @PathParam("reportType") String reportType,
                           @PathParam("params") String params);
 
