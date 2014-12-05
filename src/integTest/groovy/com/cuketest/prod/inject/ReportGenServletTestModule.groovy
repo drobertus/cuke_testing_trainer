@@ -3,10 +3,6 @@ package com.cuketest.prod.inject
 import com.cuketest.prod.DefaultReportGenerator
 import com.cuketest.prod.ReportGenerator
 import com.cuketest.prod.ReportGeneratorService
-import com.cuketest.prod.services.ReportService
-import com.cuketest.prod.services.ReportServiceImpl
-import com.cuketest.prod.services.UserService
-import com.cuketest.prod.services.UserServiceImpl
 import com.google.inject.Singleton
 import com.sun.jersey.guice.JerseyServletModule
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer

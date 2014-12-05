@@ -1,38 +1,31 @@
 package com.cuketest.prod.inject
 
-//import com.cuketest.prod.services.DataProvider
-import com.cuketest.prod.services.ReportService
-//import com.cuketest.prod.services.TestDataProvider
-import com.cuketest.prod.services.TestReportService
-import com.cuketest.prod.services.TestUserService
-import com.cuketest.prod.services.UserService
-import com.google.inject.AbstractModule;
+import com.cuketest.prod.service.DataService
 
-import java.util.List;
-import java.util.Map;
+import com.cuketest.prod.service.ReportService
+import com.cuketest.prod.service.UserService
+import com.cuketest.prod.service.impl.DefaultReportService
+import com.cuketest.prod.service.impl.DefaultUserService
+import com.google.inject.AbstractModule
+import com.google.inject.Singleton
 
 /**
  * Created by drobertu on 12/3/14.
  */
 public class ServicesTestModule extends AbstractModule {
 
-    List<String> userList = []
-    Map<String, List<String>> reportMap = [:]
+    def testDataService
 
-
-
-    ServicesTestModule(List<String> userList, Map<String, List<String>> reportMap) {
-        this.userList = userList
-        this.reportMap = reportMap
+    ServicesTestModule(DataService ds) {
+        this.testDataService = ds
     }
 
     @Override
     public void configure() {
 
-       // bind(DataProvider.class).toInstance(new TestDataProvider())
-        bind(ReportService.class).toInstance(new TestReportService(reportMap))
-        bind(UserService.class).toInstance(new TestUserService(userList))
-
+        bind(DataService.class).toInstance(testDataService)
+        bind(ReportService.class).to(DefaultReportService.class).in(Singleton.class)
+        bind(UserService.class).to(DefaultUserService.class).in(Singleton.class)
 
     }
 }

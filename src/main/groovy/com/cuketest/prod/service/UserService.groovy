@@ -1,4 +1,4 @@
-package com.cuketest.prod.services
+package com.cuketest.prod.service
 
 /**
  * Created by drobertu on 9/19/14.

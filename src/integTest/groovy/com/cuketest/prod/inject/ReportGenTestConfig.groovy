@@ -1,5 +1,6 @@
 package com.cuketest.prod.inject
 
+import com.cuketest.prod.service.DataService
 import com.google.inject.Guice
 import com.google.inject.Injector
 import com.google.inject.servlet.GuiceServletContextListener
@@ -10,20 +11,18 @@ import com.google.inject.servlet.GuiceServletContextListener
 class ReportGenTestConfig extends GuiceServletContextListener {
 
 
-    List<String> userList
-    Map<String, List<String>> reports
+    def testDataService
 
     private Injector injector
 
-    ReportGenTestConfig(List<String> users, Map<String, List<String>> reportList){
-        userList = users
-        reports = reportList
+    ReportGenTestConfig(DataService testDataService){
+        this.testDataService = testDataService
     }
 
     @Override
     protected Injector getInjector() {
 
-        injector = Guice.createInjector(new ServicesTestModule(userList, reports), new ReportGenServletTestModule());
+        injector = Guice.createInjector(new ServicesTestModule(testDataService), new ReportGenServletTestModule());
         return injector;
     }
 

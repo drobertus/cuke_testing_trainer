@@ -1,7 +1,8 @@
 package com.cuketest.prod
 
-import com.cuketest.prod.services.ReportService
-import com.cuketest.prod.services.UserService
+import com.cuketest.prod.dto.Report
+import com.cuketest.prod.service.ReportService
+import com.cuketest.prod.service.UserService
 import com.google.inject.Inject
 import groovy.util.logging.Log
 
@@ -13,14 +14,15 @@ public class ReportGeneratorService {
 
     public static final String INVALID_USER_ERROR = 'Invalid user'
     public static final String INVALID_REPORT_REQUEST = 'Invalid report request'
+    public static final String INVALID_REPORT_ID_ERROR = 'Report Id was not found'
 
     @Inject
     public ReportGeneratorService(UserService us, ReportService rs) {
         //we need to use an empty constructor since we don't
         //control the instantiation
         log.info('injecting user and report services')
-        this.userService = us //getInjectorFromFactory().getInstance(UserService.class)
-        this.reportService = rs //getInjectorFromFactory().getInstance(ReportService.class)
+        this.userService = us
+        this.reportService = rs
     }
 
     /**
@@ -28,9 +30,22 @@ public class ReportGeneratorService {
      * @param reportId
      * @return
      */
-    String show(String reportId) {
+    String getReport(final String userId, final String reportId) {
 
-        "ta-da!! Here is the report named ${reportId}"
+        if (!userService.isValidUser(userId)) {
+            return INVALID_USER_ERROR
+        }
+
+        Report report = reportService.getReport(reportId)
+        if(!report) {
+            return INVALID_REPORT_ID_ERROR
+        }
+
+        if(!userId.equals(report.userEmail)){
+            return "Wrong user for this report"
+        }
+
+        return report.theReport
     }
 
 
@@ -42,21 +57,12 @@ public class ReportGeneratorService {
             return INVALID_USER_ERROR
         }
 
-//        List<String> parsedParams = params.split(',')
-
-//        for (int i =0; i < parsedParams.size(); i ++){
-//            parsedParams[i] = parsedParams[i].trim()
-//        }
-
         if (!reportService.isValidReport(reportType, params.keySet())) {
             return INVALID_REPORT_REQUEST
         }
 
-        def pool = ['a'..'z','A'..'Z',0..9,'_'].flatten()
-        Random rand = new Random(System.currentTimeMillis())
+        return reportService.createReport(userId, reportType, params)
 
-        def passChars = (0..10).collect { pool[rand.nextInt(pool.size())] }
-        passChars.join()
     }
 
 

@@ -3,7 +3,7 @@ package com.cuketest.prod.util
 /**
  * Created by David on 12/4/2014.
  */
-class ParameterParser {
+class ReportUtils {
 
     static Map<String,String> parseParams(String paramsString) {
 
@@ -14,5 +14,14 @@ class ParameterParser {
         }
         println "ValMap = ${valMap}"
         return valMap
+    }
+
+    static generateUniqueReportId() {
+
+        def pool = ['a'..'z','A'..'Z',0..9,'_'].flatten()
+        Random rand = new Random(System.currentTimeMillis())
+
+        def passChars = (0..10).collect { pool[rand.nextInt(pool.size())] }
+        passChars.join()
     }
 }

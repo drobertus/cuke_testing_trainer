@@ -1,11 +1,13 @@
 package com.cuketest.prod
 
-import com.cuketest.prod.inject.ReportGenConfig
+import com.cuketest.prod.dto.Report
+import com.cuketest.prod.dto.ReportDefinition
 import com.cuketest.prod.inject.ReportGenTestConfig
+import com.cuketest.prod.service.testImpl.TestDataService
 import com.cuketest.prod.util.ParameterGenerator
+import com.cuketest.prod.util.ReportUtils
 import com.google.inject.servlet.GuiceFilter
 
-//import com.cuketest.prod.inject.TestInjectionModule
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.impl.client.DefaultHttpClient
@@ -15,14 +17,12 @@ import spock.lang.Specification
 
 import org.eclipse.jetty.server.Server
 
-import javax.ws.rs.core.MultivaluedMap
-
 import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertFalse
 import static org.junit.Assert.assertNotNull
 
 
-class ReportGenIntegTest extends Specification {
+class ReportGenSpockIntegTest extends Specification {
 
     def jetty
 
@@ -32,17 +32,21 @@ class ReportGenIntegTest extends Specification {
     def test1ParamVals = ['20100101','365']
 
     def testConfig
+    TestDataService testDataService
 
     def "test output of show"() {
 
         setup: "given the ID of a known report that has been generated"
-            def reportId= '1265'
+            def reportId = ReportUtils.generateUniqueReportId()
+            def rptMessage = 'ta-da!! Here is the report named ' + reportId
+            def testRpt = new Report(id: reportId, theReport: rptMessage, userEmail: this.testUserId)
+            testDataService.completedReports.put(reportId, testRpt)
 
         when: "that report is requested"
-            def url = "http://localhost:9105/reports/show/${reportId}".toURL().getText()
+            def url = "http://localhost:9105/reports/getReport/${testUserId}/${reportId}".toURL().getText()
 
         then: "we should get back the report"
-            assertEquals 'ta-da!! Here is the report named ' + reportId, url
+            assertEquals rptMessage , url
     }
 
 
@@ -54,7 +58,7 @@ class ReportGenIntegTest extends Specification {
             def formattedParams = ParameterGenerator.convertToNameValPair(test1ParamsNames, test1ParamVals)
 
 
-            def path = "/generateRpt/${testUserId}/${URLEncoder.encode(this.testName1, 'UTF-8')}/${formattedParams}" //, 'UTF-8')}"
+            def path = "/generateRpt/${testUserId}/${URLEncoder.encode(this.testName1, 'UTF-8')}/${formattedParams}"
             println "thePath= ${path}"
 
             HttpClient client = new DefaultHttpClient();
@@ -81,8 +85,6 @@ class ReportGenIntegTest extends Specification {
             def url = "http://localhost:9105/reports"
 
             def formattedParams = ParameterGenerator.convertToNameValPair(test1ParamsNames, test1ParamVals)
-            //def formattedParams = convertToNameValPair(test1ParamsNames)
-
 
             def path = "/generateRpt/${invalidUserId}/${URLEncoder.encode(testName1, 'UTF-8')}/${formattedParams}" //, 'UTF-8')}"
             println "thePath= ${path}"
@@ -111,12 +113,6 @@ class ReportGenIntegTest extends Specification {
      */
     void setup() {
 
-        def validUserList = []
-        validUserList << this.testUserId
-
-        def validTestSets = [:]
-
-        validTestSets.put(testName1, test1ParamsNames)
 
 
         jetty = new Server(9105)
@@ -127,9 +123,13 @@ class ReportGenIntegTest extends Specification {
 
 
         //TODO: Build a test framework that provides a test DataProvider but uses the real User and Report service classes
-       // testConfig = new ReportGenConfig()
-        testConfig = new ReportGenTestConfig(validUserList, validTestSets);
+        testDataService = new TestDataService()
+        testDataService.validUsers.add(this.testUserId)
 
+        def reportDef = new ReportDefinition(name: testName1, parameters: this.test1ParamsNames)
+        testDataService.recognizedReports.put(reportDef.name, reportDef)
+
+        testConfig = new ReportGenTestConfig(testDataService);
 
         context.addEventListener(testConfig);
 
@@ -142,9 +142,7 @@ class ReportGenIntegTest extends Specification {
         context.setResourceBase("./src/main/groovy");
         context.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
 
-
         jetty.setHandler(context);
-
 
         jetty.start();
     }

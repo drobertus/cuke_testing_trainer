@@ -1,4 +1,4 @@
-package com.cuketest.prod.services
+package com.cuketest.prod.service
 
 import groovy.util.logging.Log
 

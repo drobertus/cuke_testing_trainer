@@ -13,8 +13,9 @@ public interface ReportGenerator {
 
     @GET
     @Produces("application/json")
-    @Path("/show/{reportId}")
-    Response show(@PathParam("reportId") String reportId);
+    @Path("/getReport/{userId}/{reportId}")
+    Response show(@PathParam("userId") String userId,
+                  @PathParam("reportId") String reportId);
 
 
     @POST

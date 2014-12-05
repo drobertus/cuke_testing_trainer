@@ -1,9 +1,8 @@
 package com.cuketest.prod
 
-import com.cuketest.prod.util.ParameterParser
+import com.cuketest.prod.util.ReportUtils
 import com.google.inject.Inject;
 import com.google.inject.Singleton
-import com.sun.jersey.core.spi.factory.ResponseImpl
 
 import javax.ws.rs.core.Response;
 
@@ -19,15 +18,15 @@ public class DefaultReportGenerator implements ReportGenerator {
     }
 
     @Override
-    public Response show(final String reportId) {
-        def theResponse = rptGenService.show(reportId)
+    public Response show(final String userId, final String reportId) {
+        def theResponse = rptGenService.getReport(userId, reportId)
         return Response.ok(theResponse).build();
     }
 
     @Override
     public Response generateReport(final String userId, final String reportType, final String params) {
         println("params found in default=" + params)
-        Map<String,String> keyVals = ParameterParser.parseParams(params)
+        Map<String,String> keyVals = ReportUtils.parseParams(params)
         def genRequest = rptGenService.generateReport(userId, reportType, keyVals)
         return Response.ok(genRequest).build()
     }
