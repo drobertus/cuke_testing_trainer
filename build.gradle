@@ -34,14 +34,13 @@ dependencies {
 
     integTestCompile (
         'info.cukes:cucumber-java:1.2.0',
-            'info.cukes:cucumber-core:1.2.0',
-            'info.cukes:cucumber-junit:1.2.0',
-
-            'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-bundle:2.12',
-            'org.eclipse.jetty:jetty-server:9.2.2.v20140723',
-            //'org.eclipse.jetty:jetty-servlet:9.2.2.v20140723',
-            'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1',
-            'org.eclipse.jetty:jetty-webapp:9.2.2.v20140723',
+        'info.cukes:cucumber-core:1.2.0',
+        'info.cukes:cucumber-junit:1.2.0',
+        'info.cukes:cucumber-guice:1.2.0',
+        'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-bundle:2.12',
+        'org.eclipse.jetty:jetty-server:9.2.2.v20140723',
+        'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1',
+        'org.eclipse.jetty:jetty-webapp:9.2.2.v20140723',
     )
 
 }

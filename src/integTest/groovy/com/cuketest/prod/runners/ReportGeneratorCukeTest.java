@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 
 import java.util.logging.Logger;
 
-@Ignore
 @RunWith(Cucumber.class)
 @CucumberOptions(strict=true,   features={"classpath:features/report_generator.feature"},
         glue={"com.cuketest.prod"} )
