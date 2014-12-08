@@ -2,6 +2,7 @@ package com.cuketest.prod.steps;
 
 import com.cuketest.prod.fixtures.ClientFixture;
 import com.cuketest.prod.fixtures.ReportGeneratorFixture;
+import com.cuketest.prod.fixtures.ReportState;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Singleton;
@@ -13,7 +14,9 @@ public class StepsModule implements Module {
 
     @Override
     public void configure(Binder binder) {
+        binder.bind(ReportState.class).toInstance(new ReportState());
         binder.bind(ReportGeneratorFixture.class).in(Singleton.class);
         binder.bind(ClientFixture.class).in(Singleton.class);
+
     }
 }

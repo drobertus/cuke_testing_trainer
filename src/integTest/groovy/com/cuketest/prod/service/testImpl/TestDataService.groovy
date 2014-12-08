@@ -9,7 +9,7 @@ class TestDataService implements DataService {
 
     List<String> validUsers = []
     Map<String, ReportDefinition> recognizedReports = [:]
-    Map<String, Report> completedReports = [:]
+    Map<String, Report> requestedReports = [:]
 
     @Override
     ReportDefinition getReportDefinition(String reportTypeName) {
@@ -23,11 +23,13 @@ class TestDataService implements DataService {
 
     @Override
     void saveReport(Report report) {
-        completedReports.put(report.id, report)
+        println("savingReport ${report}")
+        requestedReports.put(report.id, report)
     }
 
     @Override
     Report getReportById(String reportId) {
-        return completedReports.get(reportId)
+        println("return report for ${reportId}")
+        return requestedReports.get(reportId)
     }
 }

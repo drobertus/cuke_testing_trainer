@@ -1,6 +1,7 @@
 package com.cuketest.prod
 
 import com.cuketest.prod.dto.Report
+import com.cuketest.prod.dto.ReportStatus
 import com.cuketest.prod.service.ReportService
 import com.cuketest.prod.service.UserService
 import com.google.inject.Inject
@@ -15,6 +16,7 @@ public class ReportGeneratorService {
     public static final String INVALID_USER_ERROR = 'Invalid user'
     public static final String INVALID_REPORT_REQUEST = 'Invalid report request'
     public static final String INVALID_REPORT_ID_ERROR = 'Report Id was not found'
+    public static final String WRONG_USER_REQUESTING_REPORT = 'You do not have access to this report'
 
     @Inject
     public ReportGeneratorService(UserService us, ReportService rs) {
@@ -42,17 +44,19 @@ public class ReportGeneratorService {
         }
 
         if(!userId.equals(report.userEmail)){
-            return "Wrong user for this report"
+            return WRONG_USER_REQUESTING_REPORT
         }
-
-        return report.theReport
+        if (ReportStatus.Complete.equals(report.status)) {
+            return report.theReport
+        }
+        return report.status
     }
 
 
     String generateReport(String userId,
                           String reportType,
                           Map<String,String> params) {
-        println("params found in service=" + params)
+        println("reportType=${reportType}, params found in service=" + params)
         if(!userService.isValidUser(userId)) {
             return INVALID_USER_ERROR
         }

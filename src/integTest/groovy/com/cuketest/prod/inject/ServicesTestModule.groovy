@@ -27,5 +27,6 @@ public class ServicesTestModule extends AbstractModule {
         bind(ReportService.class).to(DefaultReportService.class).in(Singleton.class)
         bind(UserService.class).to(DefaultUserService.class).in(Singleton.class)
 
+
     }
 }

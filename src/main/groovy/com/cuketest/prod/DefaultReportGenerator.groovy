@@ -27,7 +27,8 @@ public class DefaultReportGenerator implements ReportGenerator {
     public Response generateReport(final String userId, final String reportType, final String params) {
         println("params found in default=" + params)
         Map<String,String> keyVals = ReportUtils.parseParams(params)
-        def genRequest = rptGenService.generateReport(userId, reportType, keyVals)
+        def reportName = URLDecoder.decode(reportType, 'UTF-8')
+        def genRequest = rptGenService.generateReport(userId, reportName, keyVals)
         return Response.ok(genRequest).build()
     }
 }

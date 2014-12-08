@@ -27,7 +27,7 @@ class ReportGenSpockIntegTest extends Specification {
     def jetty
 
     def testUserId = '514Jks'
-    def testName1 = 'Usage_Data'
+    def testName1 = 'Usage Data'
     def test1ParamsNames = ['startDate','periodInDays']
     def test1ParamVals = ['20100101','365']
 
@@ -40,7 +40,7 @@ class ReportGenSpockIntegTest extends Specification {
             def reportId = ReportUtils.generateUniqueReportId()
             def rptMessage = 'ta-da!! Here is the report named ' + reportId
             def testRpt = new Report(id: reportId, theReport: rptMessage, userEmail: this.testUserId)
-            testDataService.completedReports.put(reportId, testRpt)
+            testDataService.requestedReports.put(reportId, testRpt)
 
         when: "that report is requested"
             def url = "http://localhost:9105/reports/getReport/${testUserId}/${reportId}".toURL().getText()

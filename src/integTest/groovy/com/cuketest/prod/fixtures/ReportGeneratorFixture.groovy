@@ -1,20 +1,24 @@
 package com.cuketest.prod.fixtures
 
 import com.cuketest.prod.dto.ReportDefinition
+import com.cuketest.prod.dto.ReportStatus
 import com.cuketest.prod.inject.ReportGenTestConfig
 import com.cuketest.prod.service.testImpl.TestDataService
+import com.google.inject.Inject
+import com.google.inject.Singleton
 import com.google.inject.servlet.GuiceFilter
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.servlet.FilterHolder
 import org.eclipse.jetty.webapp.WebAppContext
 
-/**
- * Created by David on 12/4/2014.
- */
+@Singleton
 class ReportGeneratorFixture {
 
     private Server jetty
     private TestDataService testDataService
+    public static int serverPort = 9108
+
+    ReportState reportState = ReportState.instance
 
 
     void setValidUsers(List<String> validUsers) {
@@ -29,7 +33,7 @@ class ReportGeneratorFixture {
 
     public void setup() {
 
-        jetty = new Server(9105)
+        jetty = new Server(serverPort)
 
         WebAppContext context = new WebAppContext();
 
@@ -60,4 +64,28 @@ class ReportGeneratorFixture {
     }
 
 
+    ReportStatus getStatusOfReport(String internalReportId) {
+        def reportId = this.reportState.responseReportMap.get(internalReportId)
+        //println('now setting report status for ' + reportId + ' to ' + newStatus)
+        return testDataService.getReportById(reportId).status //= newStatus
+
+    }
+
+    /**
+     * This mocks the behavior of the Report Processor System acting on the report
+     * @param testRptId
+     * @param newStatus
+     */
+    void setStatusOfReport(String testRptId, ReportStatus newStatus) {
+        def internalRptId = this.reportState.getReportIdFromTestId(testRptId)
+        testDataService.getReportById(internalRptId).status = newStatus
+    }
+
+    void completeReport(String testReportId) {
+        def internalRptId = this.reportState.getReportIdFromTestId(testReportId)
+        def rpt = testDataService.getReportById(internalRptId)
+        rpt.status = ReportStatus.Complete
+        rpt.theReport = ClientFixture.SAMPLE_REPORT_CONTENT
+
+    }
 }

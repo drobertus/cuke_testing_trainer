@@ -2,6 +2,7 @@ package com.cuketest.prod.service.impl
 
 import com.cuketest.prod.dto.Report
 import com.cuketest.prod.dto.ReportDefinition
+import com.cuketest.prod.dto.ReportStatus
 import com.cuketest.prod.service.DataService
 import com.cuketest.prod.service.ReportService
 import com.cuketest.prod.util.ReportUtils
@@ -47,6 +48,13 @@ class DefaultReportService implements ReportService {
     String createReport(String userId, String reportType, Map<String, String> params) {
 
         def uniqueId = ReportUtils.generateUniqueReportId()
+        def newReport = new Report(id:  uniqueId,
+            reportDefinition: dataService.getReportDefinition(reportType),
+            userEmail: userId,
+            status: ReportStatus.Scheduled,
+            reportParameters: params)
+
+        dataService.saveReport(newReport)
         return uniqueId
     }
 

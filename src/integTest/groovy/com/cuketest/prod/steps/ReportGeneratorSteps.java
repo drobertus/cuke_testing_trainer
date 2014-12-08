@@ -1,7 +1,10 @@
 package com.cuketest.prod.steps;
 
+import com.cuketest.prod.dto.Report;
 import com.cuketest.prod.dto.ReportDefinition;
+import com.cuketest.prod.dto.ReportStatus;
 import com.cuketest.prod.fixtures.ReportGeneratorFixture;
+import com.cuketest.prod.steps.dto.ReportDef;
 import com.google.inject.Inject;
 import cucumber.api.DataTable;
 import cucumber.api.Delimiter;
@@ -11,7 +14,10 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class ReportGeneratorSteps {
@@ -29,29 +35,37 @@ public class ReportGeneratorSteps {
     }
 
     @Given("^these valid reports$")
-    public void these_valid_reports(List<ReportDefinition> validReports) throws Throwable {
-        serverFixture.addValidReports(validReports);
+    public void these_valid_reports(List<ReportDef> validReports) throws Throwable {
+        List<ReportDefinition> valReports = new ArrayList<ReportDefinition>();
+        for(ReportDef rd : validReports) {
+            valReports.add(rd.toReportDefinition());
+        }
+
+        serverFixture.addValidReports(valReports);
     }
 
     @Given("^the default settings$")
     public void the_default_settings() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        // is there anything to do here?  Should we remove this step?
     }
 
 
 
-    @Given("^the server will set the state of report \"(.*?)\" to \"(.*?)\"$")
-    public void the_server_will_set_the_state_of_report_to(String arg1, String arg2) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    @Given("^the Report Processor will set the state of report \"(.*?)\" to \"(.*?)\"$")
+    public void the_server_will_set_the_state_of_report_to(String testRptId, ReportStatus newStatus) throws Throwable {
+        serverFixture.setStatusOfReport(testRptId, newStatus);
+
     }
 
+    @Then("^the status of report \"(.*?)\" should be \"(.*?)\"$")
+    public void the_status_of_the_report_should_be(String reportId, ReportStatus expectedStatus) throws Throwable {
+        ReportStatus theRptStatus = this.serverFixture.getStatusOfReport(reportId);
+        assertEquals (expectedStatus, theRptStatus);
+    }
 
-    @Given("^creates a dummy report$")
-    public void creates_a_dummy_report() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    @Given("^the Report Processor completes report \"(.*?)\"$")
+    public void creates_a_dummy_report(String testReportId) throws Throwable {
+        serverFixture.completeReport(testReportId);
     }
 
 
