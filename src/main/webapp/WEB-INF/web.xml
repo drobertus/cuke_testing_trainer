@@ -1,7 +1,7 @@
 <web-app>
 
     <listener>
-        <listener-class>com.cuketest.prod.inject.ReportGenConfig</listener-class>
+        <listener-class>com.cuketest.reporting.inject.ReportGenConfig</listener-class>
     </listener>
 
     <!--BA Service filter-->

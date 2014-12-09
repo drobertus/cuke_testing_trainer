@@ -1,5 +1,6 @@
 apply plugin: 'groovy'
 apply plugin: 'war'
+apply plugin: 'jacoco'
 apply from: 'gradle/integTest.gradle'
 
 sourceCompatibility = 1.7
@@ -9,15 +10,14 @@ repositories {
     mavenCentral()
 }
 
-configurations.all {
-    exclude module: "groovy"
+configurations.testCompile {
+    exclude module: "groovy-all"
 }
-
 
 
 dependencies {
     compile (
-        'org.codehaus.groovy:groovy-all:2.3.4',
+        localGroovy(),
         'javax.servlet:servlet-api:2.5',
         'com.sun.jersey:jersey-servlet:1.18.1',
         'com.sun.jersey.contribs:jersey-guice:1.18.1',
@@ -28,8 +28,6 @@ dependencies {
         group: 'junit', name: 'junit', version: '4.11',
         'org.spockframework:spock-core:0.7-groovy-2.0',
         'com.mockrunner:mockrunner-servlet:1.0.3',
-        //'com.sun.jersey:jersey-test-framework:1.18.1'
-
     )
 
     integTestCompile (
@@ -42,5 +40,9 @@ dependencies {
         'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1',
         'org.eclipse.jetty:jetty-webapp:9.2.2.v20140723',
     )
+}
 
+
+jacocoTestReport{
+    executionData integTest, test
 }
