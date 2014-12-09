@@ -1,4 +1,4 @@
-package com.cuketest.prod.fixtures
+package com.cuketest.reporting.cukeframework.fixtures
 
 /**
  * Created by David on 12/6/2014.

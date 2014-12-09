@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(strict=true,   features={"classpath:features/report_generator.feature"},
-        glue={"com.cuketest.reporting"}, format={"pretty", "html:build/cucumber/ReportGenerator"})
+        glue={"com.cuketest.reporting.cukeframework.steps"}, format={"pretty", "html:build/cucumber/ReportGenerator"})
 public class ReportGeneratorCukeTest {
 
     private static Logger log = Logger.getLogger(ReportGeneratorCukeTest.class.getName());

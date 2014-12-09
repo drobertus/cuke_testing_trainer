@@ -11,7 +11,7 @@ repositories {
 }
 
 configurations.testCompile {
-    exclude module: "groovy-all"
+    exclude module: "groovy"
 }
 
 
