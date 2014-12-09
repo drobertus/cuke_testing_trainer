@@ -17,7 +17,7 @@ configurations.testCompile {
 
 dependencies {
     compile (
-        localGroovy(),
+        'org.codehaus.groovy:groovy-all:2.3.6',
         'javax.servlet:servlet-api:2.5',
         'com.sun.jersey:jersey-servlet:1.18.1',
         'com.sun.jersey.contribs:jersey-guice:1.18.1',
