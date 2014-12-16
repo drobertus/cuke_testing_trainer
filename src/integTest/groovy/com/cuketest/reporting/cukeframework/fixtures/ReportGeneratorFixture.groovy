@@ -1,4 +1,4 @@
-package com.cuketest.reporting.fixtures
+package com.cuketest.reporting.cukeframework.fixtures
 
 import com.cuketest.reporting.dto.ReportDefinition
 import com.cuketest.reporting.inject.ReportGenTestConfig

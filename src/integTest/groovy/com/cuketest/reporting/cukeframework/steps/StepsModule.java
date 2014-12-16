@@ -1,7 +1,7 @@
-package com.cuketest.reporting.steps;
+package com.cuketest.reporting.cukeframework.steps;
 
-import com.cuketest.reporting.fixtures.ClientFixture;
-import com.cuketest.reporting.fixtures.ReportGeneratorFixture;
+import com.cuketest.reporting.cukeframework.fixtures.ClientFixture;
+import com.cuketest.reporting.cukeframework.fixtures.ReportGeneratorFixture;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Singleton;

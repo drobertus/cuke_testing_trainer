@@ -1,15 +1,7 @@
-package com.cuketest.reporting.steps;
+package com.cuketest.reporting.cukeframework.steps;
 
-import com.cuketest.reporting.dto.ReportDefinition;
-import com.cuketest.reporting.dto.ReportStatus;
-import com.cuketest.reporting.fixtures.ReportGeneratorFixture;
+import com.cuketest.reporting.cukeframework.fixtures.ReportGeneratorFixture;
 import com.google.inject.Inject;
-import cucumber.api.Delimiter;
-import cucumber.api.PendingException;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-
-import java.util.List;
 
 
 public class ReportGeneratorSteps {

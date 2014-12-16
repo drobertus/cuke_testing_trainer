@@ -1,12 +1,7 @@
-package com.cuketest.reporting.steps;
+package com.cuketest.reporting.cukeframework.steps;
 
-import com.cuketest.reporting.fixtures.ClientFixture;
+import com.cuketest.reporting.cukeframework.fixtures.ClientFixture;
 import com.google.inject.Inject;
-import cucumber.api.DataTable;
-import cucumber.api.PendingException;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
 
 
 public class ClientSteps {

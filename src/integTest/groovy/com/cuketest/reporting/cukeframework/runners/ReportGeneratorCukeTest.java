@@ -1,4 +1,4 @@
-package com.cuketest.reporting.runners;
+package com.cuketest.reporting.cukeframework.runners;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;

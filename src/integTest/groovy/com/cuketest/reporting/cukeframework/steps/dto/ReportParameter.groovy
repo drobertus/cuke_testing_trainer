@@ -1,4 +1,4 @@
-package com.cuketest.reporting.steps.dto
+package com.cuketest.reporting.cukeframework.steps.dto
 
 
 class ReportParameter {

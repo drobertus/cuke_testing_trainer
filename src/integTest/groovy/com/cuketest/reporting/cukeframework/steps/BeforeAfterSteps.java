@@ -1,6 +1,6 @@
-package com.cuketest.reporting.steps;
+package com.cuketest.reporting.cukeframework.steps;
 
-import com.cuketest.reporting.fixtures.ReportGeneratorFixture;
+import com.cuketest.reporting.cukeframework.fixtures.ReportGeneratorFixture;
 import com.google.inject.Inject;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
