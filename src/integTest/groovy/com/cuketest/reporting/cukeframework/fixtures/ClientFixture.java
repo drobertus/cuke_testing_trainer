@@ -1,7 +1,7 @@
 package com.cuketest.reporting.cukeframework.fixtures;
 
-/**
- * Created by David on 12/5/2014.
- */
+import com.google.inject.Singleton;
+
+@Singleton
 public class ClientFixture {
 }

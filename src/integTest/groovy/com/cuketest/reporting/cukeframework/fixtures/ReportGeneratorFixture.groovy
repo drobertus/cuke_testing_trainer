@@ -3,14 +3,13 @@ package com.cuketest.reporting.cukeframework.fixtures
 import com.cuketest.reporting.dto.ReportDefinition
 import com.cuketest.reporting.inject.ReportGenTestConfig
 import com.cuketest.reporting.service.testImpl.TestDataService
+import com.google.inject.Singleton
 import com.google.inject.servlet.GuiceFilter
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.servlet.FilterHolder
 import org.eclipse.jetty.webapp.WebAppContext
 
-/**
- * Created by David on 12/4/2014.
- */
+@Singleton
 class ReportGeneratorFixture {
 
     private Server jetty
