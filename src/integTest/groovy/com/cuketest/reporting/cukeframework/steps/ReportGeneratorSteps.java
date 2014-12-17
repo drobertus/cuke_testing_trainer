@@ -19,7 +19,7 @@ public class ReportGeneratorSteps {
 //    }
 //
 //    @Given("^these valid reports$")
-//    public void these_valid_reports(List<ReportDefinition> validReports) throws Throwable {
+//    public void these_valid_reports(List<ReportDef> validReports) throws Throwable {
 //        serverFixture.addValidReports(validReports);
 //    }
 //
