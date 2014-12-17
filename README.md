@@ -118,6 +118,10 @@ Update the product code to meet the specification as you go.
   long as the intention of the specification is equivalent.
 
 
+If you get stuck, you might need to peek at the "cuke_solution" branch for assistance.
+
+Some super secret pointer-
+1) Look at the integration test for code you can use to call the server
 
 
 
